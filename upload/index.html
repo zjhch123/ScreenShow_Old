@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>人脸注册</title>
+  <meta charset="utf-8">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="telephone=no,email=no" name="format-detection">
+  <meta name="screen-orientation" content="portrait">
+  <meta name="x5-orientation" content="portrait">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <script type="text/javascript" compress="no-compress">
+    !function () {
+      function a() {
+        if (parseInt(document.documentElement.clientWidth) > 720) {
+          document.documentElement.style.fontSize = 720 / 640 * 10 / 16 * 1000 + "%";
+        } else {
+          document.documentElement.style.fontSize = document.documentElement.clientWidth / 640 * 10 / 16 * 1000 + "%";
+        }
+      }
+      var b = null;
+      window.addEventListener("resize", function () {
+        clearTimeout(b);
+        b = setTimeout(a, 300);
+      }, !1);
+      a();
+    }(window);
+  </script>
+  <link href="./style.css" rel="stylesheet"/>
+</head>
+<body>
+  <img src="./bg.png" class="u-bg"/>
+  <div class="g-container">
+    <h1 class="u-title">提交人脸信息</h1>
+    <a href="javascript" class="m-upload">
+      <img class="u-preview" src="./upload.png"/>
+      <input type="file" class="u-upload" />
+    </a>
+    <input class="u-input" type="text" placeholder="请输入您的姓名"/>
+    <a class="u-submit" href="javascript:;">提交</a>
+  </div>
+</body>
+<script>
+  const preview = document.querySelector('.u-preview')
+  const fileUpload = document.querySelector('.u-upload')
+  fileUpload.addEventListener('change', function(event) {
+    const fr = new FileReader()
+    fr.onload = function(event) {
+      preview.src = event.target.result
+    }
+    fr.readAsDataURL(fileUpload.files[0])
+  })
+</script>
+</html>
