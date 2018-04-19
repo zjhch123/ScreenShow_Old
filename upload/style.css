@@ -1,10 +1,11 @@
 html, body {
-  margin: 0;
-  width: 6.4rem;
   height: 100%;
   overflow: hidden;
+  margin: 0 auto;
 }
 body {
+  width: 6.4rem;
+  display: block;
   font-size: 16px;
 }
 .u-bg {
@@ -32,6 +33,7 @@ body {
   margin: auto;
   display: block;
   position: relative;
+  overflow: hidden;
 }
 .g-container .m-upload .u-preview {
   width: 4.5rem;
@@ -40,6 +42,11 @@ body {
   display: block;
   position: relative;
   z-index: 1;
+}
+.g-container .m-upload .u-preview-opacity {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
 }
 .g-container .m-upload .u-upload {
   position: absolute;

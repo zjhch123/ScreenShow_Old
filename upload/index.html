@@ -13,8 +13,8 @@
   <script type="text/javascript" compress="no-compress">
     !function () {
       function a() {
-        if (parseInt(document.documentElement.clientWidth) > 720) {
-          document.documentElement.style.fontSize = 720 / 640 * 10 / 16 * 1000 + "%";
+        if (parseInt(document.documentElement.clientWidth) > 680) {
+          document.documentElement.style.fontSize = 680 / 640 * 10 / 16 * 1000 + "%";
         } else {
           document.documentElement.style.fontSize = document.documentElement.clientWidth / 640 * 10 / 16 * 1000 + "%";
         }
@@ -33,23 +33,44 @@
   <img src="./bg.png" class="u-bg"/>
   <div class="g-container">
     <h1 class="u-title">提交人脸信息</h1>
-    <a href="javascript" class="m-upload">
+    <a href="javascript:;" class="m-upload">
       <img class="u-preview" src="./upload.png"/>
+      <img class="u-preview-opacity"/>
       <input type="file" class="u-upload" />
     </a>
     <input class="u-input" type="text" placeholder="请输入您的姓名"/>
-    <a class="u-submit" href="javascript:;">提交</a>
+    <a class="u-submit">提交</a>
   </div>
 </body>
 <script>
   const preview = document.querySelector('.u-preview')
+  const previewOpacity = document.querySelector('.u-preview-opacity')
+  const username = document.querySelector('.u-input')
   const fileUpload = document.querySelector('.u-upload')
+  const submit = document.querySelector('.u-submit')
+  const fr = new FileReader()
+  fr.onload = function (event) {
+    preview.src = event.target.result
+    previewOpacity.src = event.target.result
+  }
   fileUpload.addEventListener('change', function(event) {
-    const fr = new FileReader()
-    fr.onload = function(event) {
-      preview.src = event.target.result
-    }
     fr.readAsDataURL(fileUpload.files[0])
+  })
+  submit.addEventListener('click', function() {
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')
+    canvas.width = previewOpacity.width
+    canvas.height = previewOpacity.height
+    context.drawImage(preview, 0, 0)
+    canvas.toBlob(function(blob) {
+      const formData = new FormData()
+      formData.append('image', blob)
+      formData.append('name', username.value)
+      fetch('http://192.168.1.101:8000/', {
+        method: 'post',
+        body: formData
+      })
+    }, 'image/jpeg', 0.8)
   })
 </script>
 </html>
