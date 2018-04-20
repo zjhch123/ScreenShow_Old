@@ -64,9 +64,9 @@
     context.drawImage(preview, 0, 0)
     canvas.toBlob(function(blob) {
       const formData = new FormData()
-      formData.append('image', blob)
+      formData.append('image', blob, 'image.jpg')
       formData.append('name', username.value)
-      fetch('http://192.168.1.101:8000/', {
+      fetch('http://101.132.147.167:8080/ljj/faceRecognize/addNewFace', {
         method: 'post',
         body: formData
       })
