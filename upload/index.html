@@ -48,6 +48,18 @@
   const username = document.querySelector('.u-input')
   const fileUpload = document.querySelector('.u-upload')
   const submit = document.querySelector('.u-submit')
+  let canSubmit = true
+
+  const setCanSubmit = function() {
+    canSubmit = true
+    submit.innerHTML = '提交'
+  }
+
+  const setCanNotSubmit = function() {
+    canSubmit = false
+    submit.innerHTML = '提交中'
+  }
+
   const fr = new FileReader()
   fr.onload = function (event) {
     preview.src = event.target.result
@@ -57,6 +69,12 @@
     fr.readAsDataURL(fileUpload.files[0])
   })
   submit.addEventListener('click', function() {
+    if (!canSubmit) return
+    if (!previewOpacity.src || !username.value) {
+      alert('请输入必要的信息~')
+      return
+    }
+    setCanNotSubmit()
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')
     canvas.width = previewOpacity.width
@@ -68,7 +86,15 @@
       formData.append('name', username.value)
       fetch('http://101.132.147.167:8080/ljj/faceRecognize/addNewFace', {
         method: 'post',
-        body: formData
+        body: formData,
+        mode: 'cors'
+      }).then(function(res) {
+        return res.json()
+      }).then(function(res) {
+        setCanSubmit()
+        if (res.code == 0) {
+          alert('添加成功!')
+        }
       })
     }, 'image/jpeg', 0.8)
   })
