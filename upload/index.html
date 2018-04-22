@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <title>人脸注册</title>
   <meta charset="utf-8">
@@ -95,6 +94,8 @@
         if (res.code == 0) {
           alert('添加成功!')
         }
+      }).catch(function() {
+        setCanSubmit()
       })
     }, 'image/jpeg', 0.8)
   })
