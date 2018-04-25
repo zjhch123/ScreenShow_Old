@@ -87,16 +87,16 @@ export default {
 <style scoped lang="scss">
 @keyframes scroll {
   0% {
-    transform: translateY(0)
+    transform: translateX(0)
   }
   80% {
-    transform: translateY(-25%);
+    transform: translateX(-25%);
   }
   90% {
-    transform: translateY(-25%);
+    transform: translateX(-25%);
   }
   100% {
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
 @keyframes fadeIn {
@@ -212,7 +212,7 @@ export default {
         }
         img {
           display: block;
-          width: 100%;
+          height: 100%;
           animation: scroll 3.5s 2s linear;
           animation-fill-mode: both;
         }

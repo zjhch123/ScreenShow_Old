@@ -16,6 +16,7 @@
         <label class="u-border"></label>
         <div class="u-inner">
           <img class="J-image"/>
+          <canvas width="720" height="720" class="u-face-obj" ref="canvas"/>
         </div>
       </div>
       <div class="m-btn-group" :class="{hidden: ready}">
@@ -27,7 +28,7 @@
 </template>
 <script>
 import router from '../../router';
-import {wsIp} from '../../config';
+import {wsIp, faceObjHeight} from '../../config';
 
 export default {
   name: 'TakePhoto',
@@ -38,7 +39,8 @@ export default {
       take: false,
       pic: false,
       ready: false,
-      socket: null
+      socket: null,
+      socket_frame: null
     }
   },
   methods: {
@@ -59,35 +61,82 @@ export default {
         // 倒计时是5s，实际上不是5s，是8.5s
       }, 1000);
     },
-    upload(img) {
+    upload() {
+      const canvas = this.$refs.canvas
+      const image = document.querySelector('.J-image')
+      const result = document.createElement('canvas')
+      result.width = 720
+      result.height = 720
+      const ctx = result.getContext('2d')
+      ctx.drawImage(image, 0, 0)
+      ctx.drawImage(canvas, 0, 0)
+      const img = result.toDataURL('image/jpeg')
       localStorage.setItem('img',img)
+    },
+    clearNumber(number) {
+      let temp = number % 100
+      if (temp < 25) {
+        number = parseInt(number / 100) * 100
+      } else if (temp < 50) {
+        number = parseInt(number / 100) * 100 + 25
+      } else if (temp < 75) {
+        number = parseInt(number / 100) * 100 + 50
+      } else {
+        number = (parseInt(number / 100) + 1) * 100
+      }
+      return number
+    },
+    drawFaceObject(result, obj) {
+      const canvas = this.$refs.canvas
+      const ctx = canvas.getContext('2d')
+      if (result.face_num == 0) {
+        ctx.clearRect(0,0,720,720)
+        return
+      }
+      const faceLeft = this.clearNumber(result.left)
+      const faceRight = this.clearNumber(result.right)
+      const faceTop = this.clearNumber(result.top)
+      const faceBottom = this.clearNumber(result.bottom)
+      const faceWidth = faceRight - faceLeft
+      const faceHeight = faceBottom - faceTop
+      const scale = 1.1
+      ctx.clearRect(0,0,720,720)
+      ctx.drawImage(obj, faceLeft, faceTop * 0.8, faceWidth * scale, faceWidth * faceObjHeight / obj.width * scale)
     }
   },
   created: function() {
       this.socket = new WebSocket(wsIp)
+      this.socket_frame = new WebSocket(wsIp)
   },
   mounted: function() {
       let that = this
       let image = document.querySelector('.J-image')
+      const face_obj = new Image()
+      face_obj.src = require(`../../assets/face_obj_${parseInt(Math.random() * 10) % 4}.png`)
       image.onload = function() {
-        that.pic === true ? that.upload(image.src) : that.socket.send('get_frame_720_720')
+        that.pic === true ? that.upload() : that.socket.send('get_frame_720_720')
       }
-      this.socket.onopen = function(){
+      this.socket.onopen = function() {
           that.socket.send('get_frame_720_720');
       }
-      this.socket.onmessage = function(data){
-          if(data.data.length<256){
-              console.log(data.data)
-          }
-          else{
-              image.src=data.data;
-          }
+      this.socket.onmessage = function(data) {
+        if(data.data.length < 256){
+          return
+        }
+        else{
+          image.src = data.data;
+          that.socket_frame.send('detect_face' + data.data)
+        }
+      }
+      this.socket_frame.onmessage = function(data) {
+        const result = JSON.parse(data.data)
+        that.drawFaceObject(result, face_obj)
       }
   },
   destroyed: function() {
     this.socket.close()
+    this.socket_frame.close()
   }
-
 }
 </script>
 <style scoped lang="scss">
@@ -273,6 +322,15 @@ export default {
       img {
         width: 100%;
         display: block;
+      }
+      .u-face-obj {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 1080px;
+        height: 1080px;
       }
     }
   }

@@ -8,7 +8,7 @@
         <div class="u-border"></div>
         <div class="m-container">
           <div class="u-inner">
-            <canvas width="787" height="1172" class="demo J_demo"/>
+            <canvas width="1174" height="788" class="demo J_demo"/>
           </div>
         </div>
       </div>
@@ -82,9 +82,9 @@ export default {
       ctx.drawImage(bgImage, 0, 0);
     }
     photoImage.onload = function() {
-      ctx.drawImage(photoImage, 118, 284,545, 545);
+      ctx.drawImage(photoImage, 37, 37,720, 720);
     }
-    bgImage.src = require('../../assets/vertical-bgc.png');
+    bgImage.src = require('../../assets/image-bgc.png');
     photoImage.src = localStorage.getItem('img') || '';
   },
   destroyed: function() {
@@ -167,9 +167,9 @@ export default {
   z-index: 2;
   .m-photo {
     position: relative;
-    margin: 90px auto 25px auto;
+    margin: 390px auto 25px auto;
     width: 980px;
-    height: 1560px;
+    height: 800px;
     .u-border {
       position: absolute;
       top: 0;
@@ -180,7 +180,7 @@ export default {
       z-index: 1;
       background-color: rgba(0,51,255,1);
       width: 970px;
-      height: 1450px;
+      height: 800px;
       transition: all .1s;
     }
     .m-container {
@@ -191,7 +191,7 @@ export default {
       bottom: 0;
       z-index: 2;
       width: 955px;
-      height: 1423px;
+      height: 788px;
       box-sizing: border-box;
       /*去掉边框*/
       /*padding: 24px;*/
@@ -207,7 +207,7 @@ export default {
         position: relative;
         .demo {
           display: block;
-          width: 100%;
+          width: 1174px;
         }
         .photo {
           position: absolute;
