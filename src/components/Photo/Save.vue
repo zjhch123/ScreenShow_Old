@@ -82,7 +82,7 @@ export default {
       ctx.drawImage(bgImage, 0, 0);
     }
     photoImage.onload = function() {
-      ctx.drawImage(photoImage, 37, 37,720, 720);
+      ctx.drawImage(photoImage, 34, 34, 720, 720);
     }
     bgImage.src = require('../../assets/image-bgc.png');
     photoImage.src = localStorage.getItem('img') || '';

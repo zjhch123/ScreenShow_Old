@@ -112,7 +112,7 @@ export default {
       let that = this
       let image = document.querySelector('.J-image')
       const face_obj = new Image()
-      face_obj.src = require(`../../assets/face_obj_${parseInt(Math.random() * 10) % 4}.png`)
+      face_obj.src = require(`../../assets/face_obj_${parseInt(Math.random() * 10) % 3}.png`)
       image.onload = function() {
         that.pic === true ? that.upload() : that.socket.send('get_frame_720_720')
       }
