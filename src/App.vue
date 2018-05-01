@@ -22,17 +22,22 @@ import fastclick from 'fastclick';
 import router from './router';
 export default {
   name: 'app',
-  created: function() {
+  methods: {
+    jumpToAdv() {
+      return setTimeout(() => {
+        if (router.history.current.name == 'Index') {
+          router.push('/adv');
+        }
+      }, 180 * 1000);
+    }
+  },
+  mounted: function() {
     fastclick.attach(document.body);
-//    let timeoutToBack = setTimeout(() => {
-//      router.push('/index');
-//    }, 180 * 1000);
-//    document.addEventListener('touchstart', function() {
-//      clearTimeout(timeoutToBack);
-//      timeoutToBack = setTimeout(() => {
-//        router.push('/index');
-//      }, 180 * 1000);
-//    });
+    let timeoutToBack = this.jumpToAdv()
+    document.addEventListener('touchstart', () => {
+      clearTimeout(timeoutToBack);
+      timeoutToBack = this.jumpToAdv()
+    });
   }
 }
 </script>

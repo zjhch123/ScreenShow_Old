@@ -31,10 +31,10 @@
         </a>
       </div>
       <div class="m-function m-profession">
-        <a data-to="/professionshow" class="u-link" v-on:click.capture="fJumpTo">
+        <a data-to="/adv" class="u-link" v-on:click.capture="fJumpTo">
           <div class="u-content u-profession-content" >
             <label class="icon"></label>
-            <p class="u-text f-shadow u-profession">专业展示</p>
+            <p class="u-text f-shadow u-profession">广告宣传</p>
           </div>
         </a>
       </div>

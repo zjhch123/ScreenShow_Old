@@ -7,6 +7,7 @@ import Take from '@/components/Photo/Take'
 import Save from '@/components/Photo/Save'
 import Share from '@/components/Photo/Share'
 import Face from '@/components/Face'
+import Adv from '@/components/Adv'
 import Cloud from '@/components/Cloud/Index'
 import Album from '@/components/Cloud/Album'
 import Show from '@/components/Show'
@@ -21,11 +22,13 @@ export default new Router({
     },
     {
       path: '/',
-      component: Index
+      component: Index,
+      name: 'Index'
     },
     {
       path: '/index',
-      component: Index
+      component: Index,
+      name: 'Index'
     },
     {
       path: '/photo',
@@ -48,6 +51,10 @@ export default new Router({
     {
       path: '/face',
       component: Face
+    },
+    {
+      path: '/adv',
+      component: Adv
     },
     {
       path: '/Cloud',
