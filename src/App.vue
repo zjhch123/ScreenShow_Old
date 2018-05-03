@@ -23,21 +23,21 @@ import router from './router';
 export default {
   name: 'app',
   methods: {
-    jumpToAdv() {
-      return setTimeout(() => {
-        if (router.history.current.name == 'Index') {
-          router.push('/adv');
-        }
-      }, 180 * 1000);
-    }
+    // jumpToAdv() {
+    //   return setTimeout(() => {
+    //     if (router.history.current.name == 'Index') {
+    //       router.push('/adv');
+    //     }
+    //   }, 180 * 1000);
+    // }
   },
   mounted: function() {
     fastclick.attach(document.body);
-    let timeoutToBack = this.jumpToAdv()
-    document.addEventListener('touchstart', () => {
-      clearTimeout(timeoutToBack);
-      timeoutToBack = this.jumpToAdv()
-    });
+    // let timeoutToBack = this.jumpToAdv()
+    // document.addEventListener('touchstart', () => {
+    //   clearTimeout(timeoutToBack);
+    //   timeoutToBack = this.jumpToAdv()
+    // });
   }
 }
 </script>

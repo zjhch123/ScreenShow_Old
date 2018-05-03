@@ -1,8 +1,7 @@
 <template>
   <div class="g-adv-container" :class="fadeOut ? 'fadeOut' : 'fadeIn'">
     <div class="u-mask"></div>
-    <img src="../assets/close_big_pic.png" class="u-close-btn" v-on:click.capture="fJumpToIndex">
-    <swiper :options="swiperOption" ref="advSwiper" class="m-swiper">
+    <swiper :options="swiperOption" ref="advSwiper" class="m-swiper" v-dbclick="fJumpToIndex">
     <!-- slides -->
       <swiper-slide 
         class="swiper-slider" 

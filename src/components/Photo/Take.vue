@@ -75,14 +75,15 @@ export default {
     },
     clearNumber(number) {
       let temp = number % 100
+      let hundred = ~~number / 100
       if (temp < 25) {
-        number = parseInt(number / 100) * 100
+        number = hundred * 100
       } else if (temp < 50) {
-        number = parseInt(number / 100) * 100 + 25
+        number = hundred * 100 + 25
       } else if (temp < 75) {
-        number = parseInt(number / 100) * 100 + 50
+        number = hundred * 100 + 50
       } else {
-        number = (parseInt(number / 100) + 1) * 100
+        number = (hundred + 1) * 100
       }
       return number
     },
