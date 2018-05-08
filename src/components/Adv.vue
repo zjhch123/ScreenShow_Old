@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       fadeOut: false,
-      advs: ['adv1.jpg', 'adv2.jpg', 'adv3.jpg', 'adv4.jpg'],
+      advs: ['adv1.png', 'adv2.png', 'adv3.png', 'adv4.png'],
       swiperOption: {
         loop: true,
         autoplay: true,

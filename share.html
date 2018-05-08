@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>设研院欢迎您</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <style type="text/css">
+
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    body,
+    .container {
+      text-align: center;
+    }
+
+
+    .item>img {
+      width: auto;
+      height: 100vh;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="item" id="insert-pic">
+      <img class="J-image" src=""/>
+    </div>
+  </div>
+</body>
+
+</html>
+<script src="./jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="./share.js"></script>
+<script type="text/javascript">
+  window.shareComponent.init({
+    title: '设研院欢迎您',
+    iconUrl: 'http://www.hzmustbe.com/hn' + window.shareComponent.getUrlParam(window.location.href, 'photo'),
+    desc: '拍照留念 2017/12/11',
+    link: window.location.href.split('#')[0]
+  })
+  document.querySelector('.J-image').src = 'http://www.hzmustbe.com/hn' + window.shareComponent.getUrlParam(window.location.href, 'photo')
+</script>
