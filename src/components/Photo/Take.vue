@@ -40,7 +40,23 @@ export default {
       pic: false,
       ready: false,
       socket: null,
-      socket_frame: null
+      socket_frame: null,
+      faceObj: {
+        faceObj0: {
+          top: new Image(),
+          middle: new Image(),
+          bottom: new Image()
+        },
+        faceObj1: {
+          top: new Image(),
+          middle: new Image(),
+          bottom: new Image()
+        },
+        faceObj2: {
+          top: new Image(),
+          middle: new Image()
+        }
+      }
     }
   },
   methods: {
@@ -87,51 +103,85 @@ export default {
       }
       return number
     },
-    drawFaceObject(result, obj) {
+    loadFaceImage() {
+      /* 时间紧迫，就先这么写了，如果以后有时间的话优化一下 */
+      this.faceObj.faceObj0.top.src = require('../../assets/face_obj_0_top.png')
+      this.faceObj.faceObj0.middle.src = require('../../assets/face_obj_0_middle.png')
+      this.faceObj.faceObj0.bottom.src = require('../../assets/face_obj_0_bottom.png')
+      this.faceObj.faceObj1.top.src = require('../../assets/face_obj_1_top.png')
+      this.faceObj.faceObj1.middle.src = require('../../assets/face_obj_1_middle.png')
+      this.faceObj.faceObj1.bottom.src = require('../../assets/face_obj_1_bottom.png')
+      this.faceObj.faceObj2.top.src = require('../../assets/face_obj_2_top.png')
+      this.faceObj.faceObj2.middle.src = require('../../assets/face_obj_2_middle.png')
+    },
+    drawFaceObject0(result) {
       const canvas = this.$refs.canvas
       const ctx = canvas.getContext('2d')
       if (result.face_num == 0) {
         ctx.clearRect(0,0,720,720)
         return
       }
-      const faceLeft = this.clearNumber(result.left)
-      const faceRight = this.clearNumber(result.right)
-      const faceTop = this.clearNumber(result.top)
-      const faceBottom = this.clearNumber(result.bottom)
-      const faceWidth = faceRight - faceLeft
-      const faceHeight = faceBottom - faceTop
+      const faceWidth = result.right - result.left
+      const faceHeight = result.bottom - result.top
       const scale = 1.1
       ctx.clearRect(0,0,720,720)
       ctx.drawImage(obj, faceLeft, faceTop * 0.8, faceWidth * scale, faceWidth * faceObjHeight / obj.width * scale)
+    },
+    drawFaceObject1(result) {
+      const canvas = this.$refs.canvas
+      const ctx = canvas.getContext('2d')
+      if (result.face_num == 0) {
+        ctx.clearRect(0,0,720,720)
+        return
+      }
+      const faceWidth = result.right - result.left
+      const faceHeight = result.bottom - result.top
+      const scale = 1.1
+      ctx.clearRect(0,0,720,720)
+      ctx.drawImage(obj, faceLeft, faceTop * 0.8, faceWidth * scale, faceWidth * faceObjHeight / obj.width * scale)
+    },
+    drawFaceObject2(result) {
+      const canvas = this.$refs.canvas
+      const ctx = canvas.getContext('2d')
+      if (result.face_num == 0) {
+        ctx.clearRect(0,0,720,720)
+        return
+      }
+      const faceWidth = result.right - result.left
+      const faceHeight = result.bottom - result.top
+      const scale = faceWidth / this.faceObj.faceObj2.top.width
+      ctx.clearRect(0,0,720,720)
+      ctx.drawImage(this.faceObj.faceObj2.top, result.nose[0] - this.faceObj.faceObj2.middle.width * scale / 2, result.nose[1] - this.faceObj.faceObj2.middle.height * scale / 2, this.faceObj.faceObj2.middle.width * scale, this.faceObj.faceObj2.middle.height * scale)
+      ctx.drawImage(this.faceObj.faceObj2.middle, result.nose[0] - this.faceObj.faceObj2.middle.width * scale / 2, result.nose[1] - this.faceObj.faceObj2.middle.height * scale / 2, this.faceObj.faceObj2.middle.width * scale, this.faceObj.faceObj2.middle.height * scale)
     }
   },
   created: function() {
       this.socket = new WebSocket(wsIp)
       this.socket_frame = new WebSocket(wsIp)
+      this.loadFaceImage()
   },
   mounted: function() {
       let that = this
       let image = document.querySelector('.J-image')
-      const face_obj = new Image()
-      face_obj.src = require(`../../assets/face_obj_${parseInt(Math.random() * 10) % 3}.png`)
+      // const face_obj_num = parseInt(Math.random() * 10) % 3
+      const face_obj_num = 2
       image.onload = function() {
-        that.pic === true ? that.upload() : that.socket.send('get_frame_720_720')
+        if (that.pic) {
+          that.upload()
+        }
       }
       this.socket.onopen = function() {
-          that.socket.send('get_frame_720_720');
+          that.socket.send('get_frame_and_detect_async');
       }
       this.socket.onmessage = function(data) {
-        if(data.data.length < 256){
-          return
-        }
-        else{
-          image.src = data.data;
-          that.socket_frame.send('detect_face' + data.data)
-        }
+        image.src = data.data;
+        that.socket_frame.send('get_facialLandmark')
       }
       this.socket_frame.onmessage = function(data) {
+        // { "face_num":1, "bottom":586,"top":236,"left":150,"right":509,"l_eye":[242,372] ,"r_eye":[389,370] , "nose":[312,457] ,"l_lip":[275,520],"r_lip":[373,517] }
         const result = JSON.parse(data.data)
-        that.drawFaceObject(result, face_obj)
+        that[`drawFaceObject${face_obj_num}`](result)
+        that.socket.send('get_frame_and_detect_async');
       }
   },
   destroyed: function() {
