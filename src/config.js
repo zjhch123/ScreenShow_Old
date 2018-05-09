@@ -1,8 +1,7 @@
 // const basePath = 'http://101.132.147.167/hn'
 const basePath = 'http://www.hzmustbe.com/hn'
 
-// const wsIp = 'ws://127.0.0.1:9998'
-const wsIp = 'ws://10.211.55.25:9998'
+const wsIp = 'ws://127.0.0.1:9998'
 
 const printWSIP_H = 'ws://localhost:8080/pimg/print/0'//横向
 const printWSIP_V= 'ws://localhost:8080/pimg/print/1'//纵向
