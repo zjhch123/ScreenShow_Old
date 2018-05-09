@@ -123,9 +123,12 @@ export default {
       }
       const faceWidth = result.right - result.left
       const faceHeight = result.bottom - result.top
-      const scale = 1.1
+      const scale = faceWidth / 500
+      const faceObj = this.faceObj.faceObj0
       ctx.clearRect(0,0,720,720)
-      ctx.drawImage(obj, faceLeft, faceTop * 0.8, faceWidth * scale, faceWidth * faceObjHeight / obj.width * scale)
+      ctx.drawImage(faceObj.top, (result.left + result.right) / 2 - faceObj.top.width * scale / 2, result.top - 200 * scale, faceObj.top.width * scale, faceObj.top.height * scale)
+      ctx.drawImage(faceObj.middle, result.nose[0] - faceObj.middle.width * scale / 2, result.nose[1] - faceObj.middle.height * scale / 2, faceObj.middle.width * scale, faceObj.middle.height * scale)
+      ctx.drawImage(faceObj.bottom, result.right, result.bottom, faceObj.bottom.width * scale, faceObj.bottom.height * scale)
     },
     drawFaceObject1(result) {
       const canvas = this.$refs.canvas
@@ -136,9 +139,12 @@ export default {
       }
       const faceWidth = result.right - result.left
       const faceHeight = result.bottom - result.top
-      const scale = 1.1
+      const scale = faceWidth / 500
+      const faceObj = this.faceObj.faceObj1
       ctx.clearRect(0,0,720,720)
-      ctx.drawImage(obj, faceLeft, faceTop * 0.8, faceWidth * scale, faceWidth * faceObjHeight / obj.width * scale)
+      ctx.drawImage(faceObj.top, (result.left + result.right) / 2 - faceObj.top.width * scale / 2, result.top - 200 * scale, faceObj.top.width * scale, faceObj.top.height * scale)
+      ctx.drawImage(faceObj.middle, result.nose[0] - faceObj.middle.width * scale / 2, result.nose[1] - faceObj.middle.height * scale / 2, faceObj.middle.width * scale, faceObj.middle.height * scale)
+      ctx.drawImage(faceObj.bottom, result.right, result.bottom, faceObj.bottom.width * scale, faceObj.bottom.height * scale)
     },
     drawFaceObject2(result) {
       const canvas = this.$refs.canvas
@@ -150,9 +156,10 @@ export default {
       const faceWidth = result.right - result.left
       const faceHeight = result.bottom - result.top
       const scale = faceWidth / this.faceObj.faceObj2.top.width
+      const faceObj = this.faceObj.faceObj2
       ctx.clearRect(0,0,720,720)
-      ctx.drawImage(this.faceObj.faceObj2.top, result.nose[0] - this.faceObj.faceObj2.middle.width * scale / 2, result.nose[1] - this.faceObj.faceObj2.middle.height * scale / 2, this.faceObj.faceObj2.middle.width * scale, this.faceObj.faceObj2.middle.height * scale)
-      ctx.drawImage(this.faceObj.faceObj2.middle, result.nose[0] - this.faceObj.faceObj2.middle.width * scale / 2, result.nose[1] - this.faceObj.faceObj2.middle.height * scale / 2, this.faceObj.faceObj2.middle.width * scale, this.faceObj.faceObj2.middle.height * scale)
+      ctx.drawImage(faceObj.top, (result.left + result.right) / 2 - faceObj.top.width * scale / 2, result.top - 250 * scale, faceObj.top.width * scale, faceObj.top.height * scale)
+      ctx.drawImage(faceObj.middle, result.nose[0] - faceObj.middle.width * scale / 2, result.nose[1] - faceObj.middle.height * scale / 2, faceObj.middle.width * scale, faceObj.middle.height * scale)
     }
   },
   created: function() {
@@ -163,8 +170,7 @@ export default {
   mounted: function() {
       let that = this
       let image = document.querySelector('.J-image')
-      // const face_obj_num = parseInt(Math.random() * 10) % 3
-      const face_obj_num = 2
+      const face_obj_num = parseInt(Math.random() * 10) % 3
       image.onload = function() {
         if (that.pic) {
           that.upload()
@@ -178,7 +184,6 @@ export default {
         that.socket_frame.send('get_facialLandmark')
       }
       this.socket_frame.onmessage = function(data) {
-        // { "face_num":1, "bottom":586,"top":236,"left":150,"right":509,"l_eye":[242,372] ,"r_eye":[389,370] , "nose":[312,457] ,"l_lip":[275,520],"r_lip":[373,517] }
         const result = JSON.parse(data.data)
         that[`drawFaceObject${face_obj_num}`](result)
         that.socket.send('get_frame_and_detect_async');

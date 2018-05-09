@@ -90,6 +90,7 @@ export default {
     }
     this.socket.onmessage = async function(data) {
       if (data.data.length < 255) {
+        console.log(data.data)
         if (data.data == '') {
           that.name = null;
           that.setMsg('欢迎光临');
